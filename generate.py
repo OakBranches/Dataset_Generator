@@ -31,23 +31,28 @@ def insertDiego(filepath):
 
     return back_im
 
-cleanDir("./Output/No/")
-cleanDir("./Output/Yes/")
+dirs = ['train', 'test', 'valid']
+for i in dirs: 
+    os.makedirs(f'./Output/{i}/Yes', exist_ok=True)
+    os.makedirs(f'./Output/{i}/No', exist_ok=True)
+    cleanDir(f'./Output/{i}/No/')
+    cleanDir(f'./Output/{i}/Yes/')
 
 a_directory = "./Origin/Photos/"
 for filename in os.listdir(a_directory):
     try:
         filepath = os.path.join(a_directory, filename)
         i = randrange(1,100)
-
+        j = randrange(1,100)
         filename = filename.split(".")[0]+'.png'
-        # print(filename)
+        
+        prefix = "train" if j < 70 else "valid" if j < 80 else "test"
         if i > 50:
             img = insertDiego(filepath)
-            img.save(f'./Output/Yes/{filename}')
+            img.save(f'./Output/{prefix}/Yes/{filename}')
         else:
             img = Image.open(filepath).resize((200,200))
-            img.convert('RGB').save(f'./Output/No/{filename}')
+            img.save(f'./Output/{prefix}/No/{filename}')
     except:
         pass
 
